@@ -19,4 +19,4 @@ slots:
     interface: content
     content: certbot-plugin
     read:
-      - $SNAP/lib/python3/site-packages
+      - $SNAP/lib/python3.5/site-packages
