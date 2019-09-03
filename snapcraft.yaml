@@ -3,7 +3,7 @@ version: script
 version-script: cd parts/certbot-dns-dnsimple/src && git describe|sed s/^v//
 summary: DNSimple DNS Authenticator plugin for Certbot
 description: TBC
-confinement: classic
+confinement: strict
 grade: devel
 
 parts:
