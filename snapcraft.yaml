@@ -1,0 +1,22 @@
+name: certbot-dns-dnsimple
+version: script
+version-script: cd parts/certbot-dns-dnsimple/src && git describe|sed s/^v//
+summary: DNSimple DNS Authenticator plugin for Certbot
+description: TBC
+confinement: classic
+grade: devel
+
+parts:
+  certbot-dns-dnsimple:
+    plugin: python
+    source: git://github.com/certbot/certbot
+    source-branch: master
+    source-subdir: certbot-dns-dnsimple
+    python-version: python3
+
+slots:
+  certbot-plugin-api:
+    interface: content
+    content: certbot-plugin
+    read:
+      - $SNAP/lib/python3/site-packages
