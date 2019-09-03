@@ -20,7 +20,7 @@ grade: devel
 
 apps:
   certbot:
-    command: certbot
+    command: certbot.wrapper
     environment:
       PATH: "$SNAP/bin:$SNAP/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
       AUGEAS_LENS_LIB: "$SNAP/usr/share/augeas/lenses/dist"
@@ -70,3 +70,12 @@ parts:
     constraints: $SNAPCRAFT_PART_SRC/constraints.txt
     python-version: python3
     after: [certbot]
+  wrappers:
+    plugin: dump
+    stage: [certbot.wrapper]
+
+plugs:
+  certbot-plugin-api:
+    interface: content
+    content: certbot-plugin
+    target: $SNAP/certbot-plugin
