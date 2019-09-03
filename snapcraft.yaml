@@ -75,7 +75,7 @@ parts:
     stage: [certbot.wrapper]
 
 plugs:
-  certbot-plugin-api:
+  plugin:
     interface: content
-    content: certbot-plugin
+    content: certbot-1
     target: $SNAP/certbot-plugin
