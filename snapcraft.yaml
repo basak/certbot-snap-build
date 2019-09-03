@@ -15,8 +15,8 @@ parts:
     python-version: python3
 
 slots:
-  certbot-plugin-api:
+  certbot:
     interface: content
-    content: certbot-plugin
+    content: certbot-1
     read:
       - $SNAP/lib/python3.5/site-packages
