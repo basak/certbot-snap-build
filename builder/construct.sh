@@ -50,6 +50,7 @@ DownloadQemuStatic() {
             | grep 'name.*v[0-9]' \
             | head -n 1 \
             | cut -d '"' -f 4)
+        echo "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-$QEMU_ARCH-static.tar.gz"
         curl -SL "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-$QEMU_ARCH-static.tar.gz" \
             | tar xzv
     fi
