@@ -6,3 +6,4 @@ stage
 certbot
 venv
 .idea
+qemu-*-static

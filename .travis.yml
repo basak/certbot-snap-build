@@ -1,18 +1,18 @@
 language: python
+env:
+  - SNAP_ARCH=amd64
+  - SNAP_ARCH=arm64
 before_install:
   - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install nginx-light python3-venv
   - sudo -E /etc/init.d/nginx stop
 install:
-  - sudo /snap/bin/lxd.migrate -yes
-  - sudo /snap/bin/lxd waitready
-  - sudo /snap/bin/lxd init --auto
   - git clone https://github.com/certbot/certbot.git certbot --branch master
   - certbot/tools/strip_hashes.py certbot/letsencrypt-auto-source/pieces/dependency-requirements.txt > certbot/constraints.txt
-before_script:
-  - sudo snapcraft --use-lxd
+  - builder/construct.sh "$SNAP_ARCH"
 script:
-  - sudo snap install --dangerous --classic *.snap
-  - sudo bash test.sh
+  - docker run -v $(pwd):$(pwd) -w $(pwd) -t builder snapcraft
+after_success:
+  - test "$SNAP_ARCH" = "amd64" && sudo ./test.sh
 deploy:
   'on':
     branch: master
@@ -24,10 +24,3 @@ notifications:
   email:
     recipients: [robie.basak@canonical.com]
     on_failure: change
-addons:
-  snaps:
-    - name: snapcraft
-      channel: stable
-      classic: true
-    - name: lxd
-      channel: stable
