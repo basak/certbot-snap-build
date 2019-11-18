@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
 # Returns the translation from Snap architecture to Docker architecture
 # Usage: GetQemuArch [amd64|arm64]
 GetDockerArch() {
@@ -67,4 +69,4 @@ RegisterQemuHandlers
 echo "QEMU_ARCH is $QEMU_ARCH"
 DownloadQemuStatic "$QEMU_ARCH"
 
-docker build --build-arg SNAP_ARCH="$SNAP_ARCH" --build-arg TARGET_ARCH="$TARGET_ARCH" --build-arg QEMU_ARCH="$QEMU_ARCH" -t builder .
+docker build --build-arg SNAP_ARCH="$SNAP_ARCH" --build-arg TARGET_ARCH="$TARGET_ARCH" --build-arg QEMU_ARCH="$QEMU_ARCH" -t builder "$SCRIPTPATH"
