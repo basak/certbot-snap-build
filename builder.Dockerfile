@@ -1,5 +1,5 @@
 ARG TARGET_ARCH
-FROM ${TARGET_ARCH}/ubuntu:xenial as builder
+FROM ${TARGET_ARCH}/ubuntu:18.04 as builder
 
 ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
@@ -33,7 +33,7 @@ RUN chmod +x /snap/bin/snapcraft
 
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
-FROM ${TARGET_ARCH}/ubuntu:xenial
+FROM ${TARGET_ARCH}/ubuntu:18.04
 
 ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
@@ -43,7 +43,9 @@ COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 
 # Generate locale
-RUN apt-get update && apt-get dist-upgrade --yes && apt-get install --yes sudo locales && locale-gen en_US.UTF-8
+RUN apt-get update \
+ && apt-get install -y sudo locales python3 python3-dev python3-venv \
+ && locale-gen en_US.UTF-8
 
 # Set the proper environment
 ENV LANG="en_US.UTF-8"
