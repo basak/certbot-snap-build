@@ -8,7 +8,7 @@ before_install:
 install:
   - git clone https://github.com/certbot/certbot.git certbot --branch master
   - certbot/tools/strip_hashes.py certbot/letsencrypt-auto-source/pieces/dependency-requirements.txt > certbot/constraints.txt
-  - builder/construct.sh "$SNAP_ARCH"
+  - ./construct_builder.sh "$SNAP_ARCH"
 script:
   - docker run -v $(pwd):$(pwd) -w $(pwd) -t builder snapcraft
 after_success:
