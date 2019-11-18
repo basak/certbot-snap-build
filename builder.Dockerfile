@@ -1,5 +1,5 @@
 ARG TARGET_ARCH
-FROM ${TARGET_ARCH}/ubuntu:18.04 as builder
+FROM ${TARGET_ARCH}/ubuntu:xenial as builder
 
 ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
@@ -20,7 +20,7 @@ RUN mkdir -p /snap/core
 RUN unsquashfs -d /snap/core/current core.snap
 
 # Grab the snapcraft snap from the stable channel and unpack it in the proper place
-RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=stable' | jq '.download_url' -r) --output snapcraft.snap
+RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $SNAP_ARCH" 'https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=stable' | jq '.download_url' -r) --output snapcraft.snap
 RUN mkdir -p /snap/snapcraft
 RUN unsquashfs -d /snap/snapcraft/current snapcraft.snap
 
@@ -33,7 +33,7 @@ RUN chmod +x /snap/bin/snapcraft
 
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
-FROM ${TARGET_ARCH}/ubuntu:18.04
+FROM ${TARGET_ARCH}/ubuntu:xenial
 
 ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
