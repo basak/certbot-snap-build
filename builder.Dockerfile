@@ -57,3 +57,5 @@ ENV SNAP_NAME="snapcraft"
 
 ARG SNAP_ARCH
 ENV SNAP_ARCH="${SNAP_ARCH}"
+
+ENV PIP_EXTRA_INDEX_URL="https://www.piwheels.org/simple"
