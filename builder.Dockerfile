@@ -1,5 +1,5 @@
 ARG TARGET_ARCH
-FROM ${TARGET_ARCH}/ubuntu:xenial as builder
+FROM ${TARGET_ARCH}/ubuntu:bionic as builder
 
 ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
@@ -33,7 +33,7 @@ RUN chmod +x /snap/bin/snapcraft
 
 # Multi-stage build, only need the snaps from the builder. Copy them one at a
 # time so they can be cached.
-FROM ${TARGET_ARCH}/ubuntu:xenial
+FROM ${TARGET_ARCH}/ubuntu:bionic
 
 ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
