@@ -16,7 +16,7 @@ install:
   - docker pull "adferrand/snapcraft:${SNAP_ARCH}"
 script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-  - docker run --rm -v $(pwd):$(pwd) -w $(pwd) -t "adferrand/snapcraft:${SNAP_ARCH}" -e PIP_INDEX_URL=${PIP_INDEX_URL} snapcraft --destructive-mode
+  - docker run --rm -v $(pwd):$(pwd) -w $(pwd) -e "PIP_INDEX_URL=${PIP_INDEX_URL}" -t "adferrand/snapcraft:${SNAP_ARCH}" snapcraft --destructive-mode
 after_success:
   - test "${SNAP_ARCH}" = "amd64" && sudo ./test.sh
 deploy:
