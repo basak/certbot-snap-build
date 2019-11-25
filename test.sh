@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-sudo snap install --dangerous --classic *.snap
+snap install --dangerous --classic *.snap
 
 python3 -m venv venv
 venv/bin/python -m pip install -e certbot/certbot-ci
