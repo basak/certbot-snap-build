@@ -1,4 +1,5 @@
 language: python
+dist: bionic
 env:
   - SNAP_ARCH=amd64
   - SNAP_ARCH=arm64
