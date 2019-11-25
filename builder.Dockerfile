@@ -42,9 +42,12 @@ COPY --from=builder /snap/core /snap/core
 COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 
-# Generate locale
+# Generate locale and install python
 RUN apt-get update \
- && apt-get install -y sudo locales python3 python3-dev python3-venv \
+ && apt-get install -y --no-install-recommends software-properties-common \
+ && add-apt-repository -y ppa:deadsnakes/ppa \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends sudo locales python3.7 python3.7-dev python3.7-venv \
  && locale-gen en_US.UTF-8
 
 # Set the proper environment

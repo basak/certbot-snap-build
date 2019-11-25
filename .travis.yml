@@ -2,8 +2,11 @@ language: python
 dist: bionic
 env:
   - SNAP_ARCH=amd64
+    PIP_INDEX_URL=https://pypi.python.org/simple
   - SNAP_ARCH=arm64
+    PIP_INDEX_URL=https://pypi.python.org/simple
   - SNAP_ARCH=armhf
+    PIP_INDEX_URL=https://www.piwheels.org/simple
 before_install:
   - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install nginx-light python3-venv
   - sudo -E /etc/init.d/nginx stop
@@ -13,7 +16,7 @@ install:
   - docker pull "adferrand/snapcraft:${SNAP_ARCH}"
 script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-  - docker run --rm -v $(pwd):$(pwd) -w $(pwd) -t "adferrand/snapcraft:${SNAP_ARCH}" snapcraft --destructive-mode
+  - docker run --rm -v $(pwd):$(pwd) -w $(pwd) -t "adferrand/snapcraft:${SNAP_ARCH}" -e PIP_INDEX_URL=${PIP_INDEX_URL} snapcraft --destructive-mode
 after_success:
   - test "${SNAP_ARCH}" = "amd64" && sudo ./test.sh
 deploy:
