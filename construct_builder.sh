@@ -2,7 +2,7 @@
 set -e
 
 # Returns the translation from Snap architecture to Docker architecture
-# Usage: GetQemuArch [amd64|arm64]
+# Usage: GetQemuArch [amd64|arm64|armhf]
 GetDockerArch() {
     SNAP_ARCH=$1
 
@@ -13,6 +13,9 @@ GetDockerArch() {
         "arm64")
             echo "arm64v8"
             ;;
+        "armhf")
+            echo "arm32v7"
+            ;;
         "*")
             echo "Not supported build architecture '$1'." >&2
             exit -1
@@ -20,7 +23,7 @@ GetDockerArch() {
 }
 
 # Returns the translation from Snap architecture to QEMU architecture
-# Usage: GetQemuArch [amd64|arm64]
+# Usage: GetQemuArch [amd64|arm64|armhf]
 GetQemuArch() {
     SNAP_ARCH=$1
 
@@ -31,6 +34,9 @@ GetQemuArch() {
         "arm64")
             echo "aarch64"
             ;;
+        "armhf")
+            echo "arm"
+            ;;
         "*")
             echo "Not supported build architecture '$1'." >&2
             exit -1
@@ -38,7 +44,7 @@ GetQemuArch() {
 }
 
 # Downloads QEMU static binary file for architecture
-# Usage: DownloadQemuStatic [x86_64|aarch64]
+# Usage: DownloadQemuStatic [x86_64|aarch64|arm]
 DownloadQemuStatic() {
     QEMU_ARCH=$1
 

@@ -3,17 +3,19 @@ dist: bionic
 env:
   - SNAP_ARCH=amd64
   - SNAP_ARCH=arm64
+  - SNAP_ARCH=armhf
 before_install:
   - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install nginx-light python3-venv
   - sudo -E /etc/init.d/nginx stop
 install:
   - git clone https://github.com/certbot/certbot.git certbot --branch v0.40.1
   - certbot/tools/strip_hashes.py certbot/letsencrypt-auto-source/pieces/dependency-requirements.txt > certbot/constraints.txt
-  - ./construct_builder.sh "$SNAP_ARCH"
+  - docker pull "adferrand/snapcraft:${SNAP_ARCH}"
 script:
-  - docker run -v $(pwd):$(pwd) -w $(pwd) -t builder snapcraft --destructive-mode
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+  - docker run --rm -v $(pwd):$(pwd) -w $(pwd) -t "adferrand/snapcraft:${SNAP_ARCH}" snapcraft --destructive-mode
 after_success:
-  - test "$SNAP_ARCH" = "amd64" && sudo ./test.sh
+  - test "${SNAP_ARCH}" = "amd64" && sudo ./test.sh
 deploy:
   'on':
     branch: master
