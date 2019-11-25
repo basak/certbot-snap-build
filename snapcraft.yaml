@@ -42,6 +42,7 @@ parts:
     source: git://github.com/basak/python-augeas
     source-branch: snap
     python-version: python3
+    python-packages: ['wheel']
     build-packages: [libaugeas-dev]
   acme:
     plugin: python
@@ -49,12 +50,14 @@ parts:
     source-subdir: acme
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
+    python-packages: ['wheel']
     build-packages: [libffi-dev, libssl-dev]
   certbot:
     plugin: python
     source: certbot
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
+    python-packages: ['wheel']
     build-packages: [libffi-dev, libssl-dev]
     after: [acme]
     override-pull: |
@@ -68,7 +71,7 @@ parts:
     python-version: python3
     after: [python-augeas, certbot]
     stage-packages: [libaugeas0]
-    python-packages: ['git+https://github.com/certbot/certbot.git']  # workaround for #12
+    python-packages: ['git+https://github.com/certbot/certbot.git', 'wheel']  # workaround for #12
   certbot-nginx:
     plugin: python
     source: certbot
@@ -76,4 +79,4 @@ parts:
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
     after: [certbot]
-    python-packages: ['git+https://github.com/certbot/certbot.git']  # workaround for #12
+    python-packages: ['git+https://github.com/certbot/certbot.git', 'wheel']  # workaround for #12
