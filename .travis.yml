@@ -6,7 +6,7 @@ before_install:
   - sudo -E apt-get -yq --no-install-suggests --no-install-recommends install nginx-light python3-venv
   - sudo -E /etc/init.d/nginx stop
 install:
-  - git clone https://github.com/certbot/certbot.git certbot --branch master
+  - git clone https://github.com/certbot/certbot.git certbot --branch v0.40.1
   - certbot/tools/strip_hashes.py certbot/letsencrypt-auto-source/pieces/dependency-requirements.txt > certbot/constraints.txt
   - ./construct_builder.sh "$SNAP_ARCH"
 script:
