@@ -39,7 +39,7 @@ COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 
 # Generate locale and install python dev env
 RUN apt-get update \
- && apt-get install -y sudo locales python3 python3-dev python3-venv python3-pip \
+ && apt-get install -y sudo locales python3 python3-dev python3-venv python3-pip git \
  && locale-gen en_US.UTF-8 \
  && rm -rf /var/lib/apt/lists/*
 
