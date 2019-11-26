@@ -6,12 +6,7 @@ COPY qemu-${QEMU_ARCH}-static /usr/bin/
 
 # Grab dependencies
 RUN apt-get update \
- && apt-get dist-upgrade --yes \
- && apt-get install --yes \
-      curl \
-      jq \
-      git \
-      squashfs-tools \
+ && apt-get install -y curl jq squashfs-tools \
  && rm -rf /var/lib/apt/lists/*
 
 # Grab the core snap from the stable channel and unpack it in the proper place
@@ -32,8 +27,7 @@ RUN mkdir -p /snap/bin \
  && echo 'exec "$SNAP/usr/bin/python3" "$SNAP/bin/snapcraft" "$@"' >> /snap/bin/snapcraft \
  && chmod +x /snap/bin/snapcraft
 
-# Multi-stage build, only need the snaps from the builder. Copy them one at a
-# time so they can be cached.
+# Multi-stage build, only need the snaps from the builder. Copy them one at a time so they can be cached.
 FROM ${TARGET_ARCH}/ubuntu:bionic
 
 ARG QEMU_ARCH
