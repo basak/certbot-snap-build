@@ -6,7 +6,7 @@ COPY qemu-${QEMU_ARCH}-static /usr/bin/
 
 # Grab dependencies
 RUN apt-get update \
- && apt-get install -y curl jq squashfs-tools \
+ && apt-get install -y --no-install-recommends curl jq squashfs-tools \
  && rm -rf /var/lib/apt/lists/*
 
 # Grab the core snap from the stable channel and unpack it in the proper place
@@ -39,7 +39,7 @@ COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 
 # Generate locale and install python dev env
 RUN apt-get update \
- && apt-get install -y sudo locales python3 python3-dev python3-venv python3-pip git \
+ && apt-get install -y --no-install-recommends sudo locales git python3 python3-dev python3-venv python3-pip \
  && locale-gen en_US.UTF-8 \
  && rm -rf /var/lib/apt/lists/*
 
