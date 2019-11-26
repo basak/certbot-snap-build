@@ -10,10 +10,8 @@ before_install:
 install:
   - git clone https://github.com/certbot/certbot.git certbot --branch v0.40.1
   - certbot/tools/strip_hashes.py certbot/letsencrypt-auto-source/pieces/dependency-requirements.txt > certbot/constraints.txt
-  - docker pull "adferrand/snapcraft:${SNAP_ARCH}"
 script:
-  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
-  - docker run --rm -v $(pwd):$(pwd) -w $(pwd) -t "adferrand/snapcraft:${SNAP_ARCH}" snapcraft --destructive-mode
+  - ./build.sh "${SNAP_ARCH}"
 after_success:
   - test "${SNAP_ARCH}" = "amd64" && sudo ./test.sh
 deploy:

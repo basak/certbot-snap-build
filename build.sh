@@ -3,12 +3,12 @@ set -em
 
 SNAP_ARCH=$1
 
-docker run --net=host --rm -v "$(pwd)/packages:/data/packages" pypiserver/pypiserver &
+docker run --net=host --rm -v "$(pwd)/packages:/data/packages" --name pypiserver pypiserver/pypiserver &
 
 PIP_SERVER_PID=$!
 
 function cleanup() {
-    kill $PIP_SERVER_PID
+    docker rm -s pypiserver
 }
 
 trap cleanup EXIT
