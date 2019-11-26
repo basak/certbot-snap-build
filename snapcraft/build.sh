@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 # Returns the translation from Snap architecture to Docker architecture
 # Usage: GetQemuArch [amd64|arm64|armhf]
 GetDockerArch() {
@@ -48,7 +50,7 @@ GetQemuArch() {
 DownloadQemuStatic() {
     QEMU_ARCH=$1
 
-    if [ ! -f "qemu-${QEMU_ARCH}-static" ]; then
+    if [ ! -f "${DIR}/qemu-${QEMU_ARCH}-static" ]; then
         QEMU_DOWNLOAD_URL="https://github.com/multiarch/qemu-user-static/releases/download"
         QEMU_LATEST_TAG=$(curl -s https://api.github.com/repos/multiarch/qemu-user-static/tags \
             | grep 'name.*v[0-9]' \
@@ -56,7 +58,7 @@ DownloadQemuStatic() {
             | cut -d '"' -f 4)
         echo "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-$QEMU_ARCH-static.tar.gz"
         curl -SL "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-$QEMU_ARCH-static.tar.gz" \
-            | tar xzv
+            | tar xzv -C "${DIR}"
     fi
 }
 
@@ -74,4 +76,4 @@ RegisterQemuHandlers
 echo "QEMU_ARCH is $QEMU_ARCH"
 DownloadQemuStatic "$QEMU_ARCH"
 
-docker build --build-arg SNAP_ARCH="$SNAP_ARCH" --build-arg TARGET_ARCH="$TARGET_ARCH" --build-arg QEMU_ARCH="$QEMU_ARCH" -t builder -f builder.Dockerfile .
+docker build --build-arg SNAP_ARCH="$SNAP_ARCH" --build-arg TARGET_ARCH="$TARGET_ARCH" --build-arg QEMU_ARCH="$QEMU_ARCH" -t builder "${DIR}"
