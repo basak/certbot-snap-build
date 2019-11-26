@@ -6,7 +6,7 @@ COPY qemu-${QEMU_ARCH}-static /usr/bin/
 
 # Grab dependencies
 RUN apt-get update \
- && apt-get install -y --no-install-recommends curl jq squashfs-tools \
+ && apt-get install -y --no-install-recommends ca-certificates curl jq squashfs-tools \
  && rm -rf /var/lib/apt/lists/*
 
 # Grab the core snap from the stable channel and unpack it in the proper place
