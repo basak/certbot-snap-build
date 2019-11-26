@@ -4,6 +4,6 @@ prime
 stage
 *.snap
 certbot
-venv
+venv*
 .idea
 qemu-*-static
