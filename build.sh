@@ -8,7 +8,7 @@ docker run --net=host --rm -v "$(pwd)/packages:/data/packages" --name pypiserver
 PIP_SERVER_PID=$!
 
 function cleanup() {
-    docker rm -s pypiserver
+    docker rm --force pypiserver
 }
 
 trap cleanup EXIT

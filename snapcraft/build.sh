@@ -8,7 +8,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 GetDockerArch() {
     SNAP_ARCH=$1
 
-    case "$SNAP_ARCH" in
+    case "${SNAP_ARCH}" in
         "amd64")
             echo "amd64"
             ;;
@@ -29,7 +29,7 @@ GetDockerArch() {
 GetQemuArch() {
     SNAP_ARCH=$1
 
-    case "$SNAP_ARCH" in
+    case "${SNAP_ARCH}" in
         "amd64")
             echo "x86_64"
             ;;
@@ -56,8 +56,8 @@ DownloadQemuStatic() {
             | grep 'name.*v[0-9]' \
             | head -n 1 \
             | cut -d '"' -f 4)
-        echo "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-$QEMU_ARCH-static.tar.gz"
-        curl -SL "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-$QEMU_ARCH-static.tar.gz" \
+        echo "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-${QEMU_ARCH}-static.tar.gz"
+        curl -SL "${QEMU_DOWNLOAD_URL}/${QEMU_LATEST_TAG}/x86_64_qemu-${QEMU_ARCH}-static.tar.gz" \
             | tar xzv -C "${DIR}"
     fi
 }
@@ -69,11 +69,11 @@ RegisterQemuHandlers() {
 }
 
 SNAP_ARCH=$1
-TARGET_ARCH=$(GetDockerArch "$SNAP_ARCH")
-QEMU_ARCH=$(GetQemuArch "$SNAP_ARCH")
+TARGET_ARCH=$(GetDockerArch "${SNAP_ARCH}")
+QEMU_ARCH=$(GetQemuArch "${SNAP_ARCH}")
 
 RegisterQemuHandlers
-echo "QEMU_ARCH is $QEMU_ARCH"
-DownloadQemuStatic "$QEMU_ARCH"
+echo "QEMU_ARCH is ${QEMU_ARCH}"
+DownloadQemuStatic "${QEMU_ARCH}"
 
-docker build --build-arg SNAP_ARCH="$SNAP_ARCH" --build-arg TARGET_ARCH="$TARGET_ARCH" --build-arg QEMU_ARCH="$QEMU_ARCH" -t builder "${DIR}"
+docker build --network=host --build-arg "SNAP_ARCH=${SNAP_ARCH}" --build-arg "TARGET_ARCH=${TARGET_ARCH}" --build-arg "QEMU_ARCH=${QEMU_ARCH}" -t "builder:${SNAP_ARCH}" "${DIR}"
