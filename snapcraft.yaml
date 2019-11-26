@@ -55,7 +55,6 @@ parts:
     source: certbot
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
-    python-packages: ['wheel']
     build-packages: [libffi-dev, libssl-dev]
     after: [acme]
     override-pull: |
