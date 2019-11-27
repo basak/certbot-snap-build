@@ -3,7 +3,7 @@ set -em
 
 SNAP_ARCH=$1
 
-docker run --net=host --rm -v "$(pwd)/packages:/data/packages" --name pypiserver pypiserver/pypiserver &
+docker run --net=host --rm -v "$(pwd)/packages:/data/packages" --name pypiserver pypiserver/pypiserver -d
 
 PIP_SERVER_PID=$!
 
