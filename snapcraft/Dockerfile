@@ -9,11 +9,17 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates curl jq squashfs-tools \
  && rm -rf /var/lib/apt/lists/*
 
-# Grab the core snap from the stable channel and unpack it in the proper place
 ARG SNAP_ARCH
+
+# Grab the core snap from the stable channel and unpack it in the proper place
 RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $SNAP_ARCH" 'https://api.snapcraft.io/api/v1/snaps/details/core' | jq '.download_url' -r) --output core.snap \
  && mkdir -p /snap/core \
  && unsquashfs -d /snap/core/current core.snap
+
+# Grab the core18 snap from the stable channel and unpack it in the proper place
+RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $SNAP_ARCH" 'https://api.snapcraft.io/api/v1/snaps/details/core18' | jq '.download_url' -r) --output core18.snap \
+ && mkdir -p /snap/core18 \
+ && unsquashfs -d /snap/core18/current core18.snap
 
 # Grab the snapcraft snap from the stable channel and unpack it in the proper place
 RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $SNAP_ARCH" 'https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=stable' | jq '.download_url' -r) --output snapcraft.snap \
@@ -34,12 +40,13 @@ ARG QEMU_ARCH
 COPY qemu-${QEMU_ARCH}-static /usr/bin/
 
 COPY --from=builder /snap/core /snap/core
+COPY --from=builder /snap/core18 /snap/core18
 COPY --from=builder /snap/snapcraft /snap/snapcraft
 COPY --from=builder /snap/bin/snapcraft /snap/bin/snapcraft
 
-# Generate locale and install python dev env
+# Generate locale and add runtime dependencies
 RUN apt-get update \
- && apt-get install -y --no-install-recommends sudo locales \
+ && apt-get install -y --no-install-recommends sudo locales git \
  && locale-gen en_US.UTF-8 \
  && rm -rf /var/lib/apt/lists/*
 
