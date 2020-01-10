@@ -60,7 +60,9 @@ parts:
     override-pull: |
         snapcraftctl pull
         snapcraftctl set-version `cd $SNAPCRAFT_PART_SRC && git describe|sed s/^v//`
-    python-packages: ['wheel']
+    # Workaround for lack of site-packages leading to empty sitecustomize.py
+    stage:
+      - -usr/lib/python3.6/sitecustomize.py
   certbot-apache:
     plugin: python
     source: certbot
@@ -69,12 +71,19 @@ parts:
     python-version: python3
     after: [python-augeas, certbot]
     stage-packages: [libaugeas0]
-    python-packages: ['wheel']
+    stage:
+      # Prefer cffi
+      - -lib/python3.6/site-packages/augeas.py
   certbot-nginx:
     plugin: python
     source: certbot
     source-subdir: certbot-nginx
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
-    after: [certbot]
-    python-packages: ['wheel']
+    # This is the last step, compile pycache now as there should be no conflicts.
+    override-prime: |
+      snapcraftctl prime
+      ./usr/bin/python3 -m compileall -q .
+    # After certbot-apache to not rebuild duplicates (essentially sharing what was already staged,
+    # like zope)
+    after: [certbot-apache]
