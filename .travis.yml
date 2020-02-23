@@ -11,6 +11,7 @@ install:
   - git clone https://github.com/certbot/certbot.git certbot --branch v0.40.1
   - certbot/tools/strip_hashes.py certbot/letsencrypt-auto-source/pieces/dependency-requirements.txt > certbot/constraints.txt
 script:
+  - ./snapcraft/build.sh "${SNAP_ARCH}"
   - ./build.sh "${SNAP_ARCH}"
 after_success:
   - test "${SNAP_ARCH}" = "amd64" && sudo ./test.sh
@@ -23,5 +24,5 @@ deploy:
   skip_cleanup: true
 notifications:
   email:
-    recipients: [robie.basak@canonical.com]
+    recipients: [robie.basak@canonical.com, ferrand.ad@gmail.com]
     on_failure: change

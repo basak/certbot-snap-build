@@ -49,13 +49,14 @@ parts:
     source-subdir: acme
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
+    # Necessary to build cryptography and cffi wheels if required (eg. on armhf, arm64)
     build-packages: [libffi-dev, libssl-dev]
   certbot:
     plugin: python
     source: certbot
+    source-subdir: certbot
     constraints: [$SNAPCRAFT_PART_SRC/constraints.txt]
     python-version: python3
-    build-packages: [libffi-dev, libssl-dev]
     after: [acme]
     override-pull: |
         snapcraftctl pull
