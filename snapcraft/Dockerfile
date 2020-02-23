@@ -22,6 +22,7 @@ RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $SNAP_ARC
  && unsquashfs -d /snap/core18/current core18.snap
 
 # Grab the snapcraft snap from the stable candidate and unpack it in the proper place
+# TODO: move back to stable channel once snapcraft 3.10 has been pushed to it.
 RUN curl -L $(curl -H 'X-Ubuntu-Series: 16' -H "X-Ubuntu-Architecture: $SNAP_ARCH" 'https://api.snapcraft.io/api/v1/snaps/details/snapcraft?channel=candidate' | jq '.download_url' -r) --output snapcraft.snap \
  && mkdir -p /snap/snapcraft \
  && unsquashfs -d /snap/snapcraft/current snapcraft.snap
